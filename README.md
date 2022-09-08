@@ -1,6 +1,6 @@
 # Release Prototype - September 8, 2022
 
-## Home Page
+## **Home Page**
 '''
 + Navigation Bar
 + Search Bar (Does not feed to database yet)
