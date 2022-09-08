@@ -2,7 +2,7 @@
 
 ## Home Page
 
-+Navigation Bar
++Navigation Bar  
 +Search Bar (Does not feed to database yet)  
 +PDF/Doc Upload Button (Opens File Manager and Accepts File Input)  
 +Video Upload Button (Opens File Manager and Accepts File Input)  
