@@ -10,5 +10,11 @@ Home Page
 +Video Upload Button (Opens File Manager and Accepts File Input)  
 +Project Repository Button (Redirects to GitHub Repo)  
 
+AWS Server  
+
++EC2 Instance Created  
++Organization Created
++AWS Database Connected
++MySQL 
 ## Fixes
 
