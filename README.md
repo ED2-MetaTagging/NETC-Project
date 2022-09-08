@@ -13,7 +13,7 @@ Home Page
 AWS Server  
 
 +EC2 Instance Created  
-+Organization Created
++Organization Created  
 +AWS Database Connected  
 +MySQL 
 ## Fixes
