@@ -15,7 +15,7 @@
 
 +EC2 Instance Created  
 +Organization Created  
-+AWS Database Connected (Used Amazon RDS to store server into the cloud, allowing access from any location)
++AWS Database Connected (Used Amazon RDS to store server into the cloud, allowing access from any location)  
 +MySQL Server Connected to AWS (To manage data and write SQL queries)
 
 ## Fixes
