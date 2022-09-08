@@ -2,7 +2,7 @@
 
 ## Features
 
-**Home Page  
+**Home Page**  
 
 +Navigation Bar  
 +Search Bar (Does not feed to database yet)  
@@ -10,7 +10,7 @@
 +Video Upload Button (Opens File Manager and Accepts File Input)  
 +Project Repository Button (Redirects to GitHub Repo)  
 
-**AWS Server  
+**AWS Server**  
 
 +EC2 Instance Created  
 +Organization Created  
