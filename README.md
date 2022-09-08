@@ -14,7 +14,7 @@ AWS Server
 
 +EC2 Instance Created  
 +Organization Created
-+AWS Database Connected
++AWS Database Connected  
 +MySQL 
 ## Fixes
 
