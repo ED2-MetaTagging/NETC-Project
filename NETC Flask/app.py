@@ -40,7 +40,7 @@ def upload():
                 msg = "Upload Done ! "
 
     #Opens file and runs Image Extraction, closes and removes file after
-    pdf_file = fitz.open(os.path.dirname(__file__) + "\\" + filename)
+    pdf_file = fitz.open(os.path.dirname(__file__) + "/" + filename)
     IteratePDF(pdf_file)
     pdf_file.close()
     os.remove(filename)
