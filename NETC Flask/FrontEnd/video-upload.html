@@ -12,26 +12,34 @@
     <!-- jQueryee-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-   <!-- Favicon-->
-   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='assets/img/favicon.png')}}" />
-   <!-- Font Awesome icons (free version)-->
-   <script
-     src="https://use.fontawesome.com/releases/v5.15.3/js/all.js"
-     crossorigin="anonymous"
-   ></script>
-   <!-- Google fonts-->
-   <link
-     href="https://fonts.googleapis.com/css?family=Montserrat:400,700"
-     rel="stylesheet"
-     type="text/css"
-   />
-   <link
-     href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic"
-     rel="stylesheet"
-     type="text/css"
-   />
-   <!-- Core theme CSS (includes Bootstrap)-->
-   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}" />
+    <!-- Favicon-->
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{ url_for('static', filename='assets/img/favicon.png')}}"
+    />
+    <!-- Font Awesome icons (free version)-->
+    <script
+      src="https://use.fontawesome.com/releases/v5.15.3/js/all.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Google fonts-->
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='css/styles.css')}}"
+    />
   </head>
   <body id="page-top">
     <!-- Navigation-->
@@ -64,27 +72,29 @@
     </nav>
     <!-- Masthead-->
     <header class="masthead bg-primary text-white text-center">
-        <div class="container d-flex align-items-center flex-column">
-          <!-- <img class="masthead-avatar mb-5" src="assets/img/head_logo.JPG" alt="..." /> -->
-          <!-- Masthead Heading-->
-          <h1 class="masthead-heading mb-0">
-            Video Upload
-          </h1>
-          <!-- Icon Divider-->
-          <div class="divider-custom divider-light">
-            <div class="divider-custom-line"></div>
-            <!--<div class="divider-custom-icon"><i class="fas fa-star"></i></div> -->
-            <div class="divider-custom-line"></div>
-          </div>
-          <!-- Masthead Subheading-->
-          <p class="masthead-subheading font-weight-light mb-0">
-            <br /><br /><br />Input the desired video file into the system by: <br><br>
-          Clicking on "Choose File" button to access your file manager <br><br>
-          Find the desired mp3 or mp4 file <br><br> Click "submit"
-          and now the video should be uploaded into the system <br><br> Click on "Home" in the navigation bar above to go back
-          </p>
+      <div class="container d-flex align-items-center flex-column">
+        <!-- <img class="masthead-avatar mb-5" src="assets/img/head_logo.JPG" alt="..." /> -->
+        <!-- Masthead Heading-->
+        <h1 class="masthead-heading mb-0">Video Upload</h1>
+        <!-- Icon Divider-->
+        <div class="divider-custom divider-light">
+          <div class="divider-custom-line"></div>
+          <!--<div class="divider-custom-icon"><i class="fas fa-star"></i></div> -->
+          <div class="divider-custom-line"></div>
         </div>
-      </header>
+        <!-- Masthead Subheading-->
+        <p class="masthead-subheading font-weight-light mb-0">
+          <br /><br /><br />Input the desired video file into the system by:
+          <br /><br />
+          Clicking on "Choose File" button to access your file manager
+          <br /><br />
+          Find the desired mp3 or mp4 file <br /><br />
+          Click "submit" and now the video should be uploaded into the system
+          <br /><br />
+          Click on "Home" in the navigation bar above to go back
+        </p>
+      </div>
+    </header>
 
     <!-- Video Upload Section-->
     <section class="page-section portfolio" id="videoupload">
@@ -113,18 +123,28 @@
                   <i class="fas fa-plus fa-3x"></i>
                 </div>
               </div>
-              <img class="img-fluid" src="{{ url_for('static', filename='assets/img/portfolio/video.png')}}" alt="..." />
-              <p class="mb-4" align ="center">Upload the desired video here.</p>
+              <img
+                class="img-fluid"
+                src="{{ url_for('static', filename='assets/img/portfolio/video.png')}}"
+                alt="..."
+              />
+              <p class="mb-4" align="center">Upload the desired video here.</p>
 
               <!-- Enter the file to be uploaded and processed-->
-              <form method='POST' enctype='multipart/form-data'>
-              {{form.hidden_tag()}}
-              {{form.file()}}
-              {{form.submit()}}
+              <form
+                action="/AWS-Video-File-upload"
+                method="post"
+                enctype="multipart/form-data">
+                <input type="file" name="file" value="file" />
+                <input
+                  type="submit"
+                  name="upload"
+                  value="Upload"
+                  class="btn btn-success"
+                />
               </form>
-              <div align="center">
-                <progress max="”100”" value="”0”"></progress>
-              </div>
+              {{msg}}
+              
             </div>
           </div>
         </div>
