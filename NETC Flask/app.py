@@ -14,7 +14,7 @@ BUCKET_NAME = 'netc-filestorage'
 #routes to html pages
 
 #initial page
-@app.route('/', methods=['GET',"POST"])
+@app.route('/')
 def index():
     return render_template('index.html')
 
