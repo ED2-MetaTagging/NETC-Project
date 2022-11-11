@@ -1,10 +1,16 @@
 # import libraries  
-import io   
-from PIL import Image 
+import io 
+from PIL import Image
+from BackEnd.Python.s3upload import upload_to_aws
+import os
 
+#Bucket name for AWS
+BUCKET_NAME = 'netc-filestorage'
 
 # iterate over PDF pages 
 def IteratePDF (pdf_file):
+
+
     for page_index in range(len(pdf_file)): 
         # get the page itself 
         page = pdf_file[page_index] 
@@ -35,6 +41,18 @@ def IteratePDF (pdf_file):
 
             # load it to PIL
             image = Image.open(io.BytesIO(image_bytes))
+
+            image_path = os.path.dirname(__file__)
         
             # save it to local disk
-            image.save(open(f"image{page_index+1}_{image_index}.{image_ext}", "wb"))
+            image.save(open(f"{image_path}/image{page_index+1}_{image_index}.{image_ext}", "wb"))
+
+            imagename = f"image{page_index+1}_{image_index}.{image_ext}"
+
+            #uploads to AWS and removes images locally
+            uploaded = upload_to_aws(os.path.dirname(__file__) + "\\" + imagename,BUCKET_NAME,'Image-Storage/' + imagename)
+
+            os.remove(os.path.dirname(__file__) + "\\" + imagename)
+
+
+
