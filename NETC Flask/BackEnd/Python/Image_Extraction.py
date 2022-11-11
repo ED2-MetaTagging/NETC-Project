@@ -50,9 +50,9 @@ def IteratePDF (pdf_file):
             imagename = f"image{page_index+1}_{image_index}.{image_ext}"
 
             #uploads to AWS and removes images locally
-            uploaded = upload_to_aws(os.path.dirname(__file__) + "\\" + imagename,BUCKET_NAME,'Image-Storage/' + imagename)
+            uploaded = upload_to_aws(os.path.dirname(__file__) + "/" + imagename,BUCKET_NAME,'Image-Storage/' + imagename)
 
-            os.remove(os.path.dirname(__file__) + "\\" + imagename)
+            os.remove(os.path.dirname(__file__) + "/" + imagename)
 
 
 
