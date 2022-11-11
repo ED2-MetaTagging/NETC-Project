@@ -1,25 +1,15 @@
-from flask import Flask, render_template
-from flask_wtf import FlaskForm
-from wtforms import FileField, SubmitField
+from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
-from wtforms.validators import InputRequired
 from BackEnd.Python.s3upload import upload_to_aws
 from BackEnd.Python.Image_Extraction import IteratePDF
+import os
+import fitz
 
 
 app = Flask(__name__,template_folder='FrontEnd',static_folder='static')
 
-#File key for upload form
-app.config['SECRET_KEY'] = 'NETCFILEKEY'
-app.config['UPLOAD_FOLDER'] = 'static/files'
 
-#class functions
-
-#Upload file form to upload files to flask
-class UploadFileForm(FlaskForm):
-    file = FileField("file", validators=[InputRequired()])
-    submit = SubmitField("Upload File")
-
+BUCKET_NAME = 'netc-filestorage'
 
 #routes to html pages
 
@@ -33,29 +23,50 @@ def index():
 def home():
     return render_template('index.html')
 
-#PDF Upload page, form upload to AWS
-@app.route('/PDF-upload', methods=['GET',"POST"])
+#PDF Upload page
+@app.route('/PDF-upload')
 def PDFupload():
-    form = UploadFileForm()
-    if form.validate_on_submit():
-        file = form.file.data # First grab the file
+    return render_template('PDF-upload.html')
 
-        IteratePDF (__file__)
+#Upload to AWS
+@app.route('/AWS-File-upload',methods=['post'])
+def upload():
+    if request.method == 'POST':
+        img = request.files['file']
+        if img:
+                filename = secure_filename(img.filename)
+                img.save(filename)
+                uploaded = upload_to_aws(filename,BUCKET_NAME,'File-Storage/' + filename)
+                msg = "Upload Done ! "
 
-        uploaded = upload_to_aws(__file__, 'netc-filestorage', 'File-Storage/' + secure_filename(file.filename)) #Upload to AWS
+    #Opens file and runs Image Extraction, closes and removes file after
+    pdf_file = fitz.open(os.path.dirname(__file__) + "\\" + filename)
+    IteratePDF(pdf_file)
+    pdf_file.close()
+    os.remove(filename)
 
-        return "File has been uploaded."
-    return render_template('PDF-upload.html',form=form)
+    return render_template("PDF-upload.html",msg =msg)
 
-#Video Upload page, form upload to AWS
-@app.route('/video-upload', methods=['GET',"POST"])
+#Video Upload page
+@app.route('/video-upload')
 def videoupload():
-    form = UploadFileForm()
-    if form.validate_on_submit():
-        file = form.file.data # First grab the file
-        uploaded = upload_to_aws(__file__, 'netc-filestorage', 'Video-File-Storage/' + secure_filename(file.filename)) #Upload to AWS
-        return "Video File has been uploaded."
-    return render_template('video-upload.html',form=form)
+    return render_template('video-upload.html')
+
+#upload to AWS
+@app.route('/AWS-Video-File-upload',methods=['post'])
+def AWSVideoupload():
+    if request.method == 'POST':
+        img = request.files['file']
+        if img:
+                filename = secure_filename(img.filename)
+                img.save(filename)
+                uploaded = upload_to_aws(filename,BUCKET_NAME,'Video-File-Storage/' + filename)
+                msg = "Upload Done ! "
+
+    os.remove(filename)
+
+    return render_template("video-upload.html",msg =msg)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
