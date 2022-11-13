@@ -12,34 +12,12 @@
     <!-- jQueryee-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <!--SDK and S3 bucket js code-->
-    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.357.0.min.js"></script>
-    <script
-      type="text/javascript"
-      src="https://code.jquery.com/jquery-3.2.1.min.js"
-    ></script>
-    <script type="text/javascript">
-      //Bucket Configurations
-
-      var bucketName = "netc-filestorage";
-      var bucketRegion = "us-east-1";
-      var IdentityPoolId = "us-east-1:32729568-ccac-4282-97a5-92258b2f5605";
-
-      AWS.config.update({
-        region: bucketRegion,
-        credentials: new AWS.CognitoIdentityCredentials({
-          IdentityPoolId: IdentityPoolId,
-        }),
-      });
-
-      var s3 = new AWS.S3({
-        apiVersion: "2006-03-01",
-        params: { Bucket: bucketName },
-      });
-    </script>
-
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='assets/img/favicon.png')}}" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{ url_for('static', filename='assets/img/favicon.png')}}"
+    />
     <!-- Font Awesome icons (free version)-->
     <script
       src="https://use.fontawesome.com/releases/v5.15.3/js/all.js"
@@ -57,7 +35,11 @@
       type="text/css"
     />
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='css/styles.css')}}"
+    />
   </head>
   <body id="page-top">
     <!-- Navigation-->
@@ -80,16 +62,6 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item mx-0 mx-lg-1">
-              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="#search"
-                >Search</a
-              >
-            </li>
-            <li class="nav-item mx-0 mx-lg-1">
-              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="#fileupload"
-                >PDF/Doc Upload</a
-              >
-            </li>
-            <li class="nav-item mx-0 mx-lg-1">
               <a class="nav-link py-3 px-0 px-lg-3 rounded" href="#videoupload"
                 >Video Upload</a
               >
@@ -100,21 +72,21 @@
     </nav>
     <!-- Masthead-->
     <header class="masthead bg-primary text-white text-center">
-        <div class="container d-flex align-items-center flex-column">
-          <!-- <img class="masthead-avatar mb-5" src="assets/img/head_logo.JPG" alt="..." /> -->
-          <!-- Masthead Heading-->
-          <h1 class="masthead-heading mb-0">
-            Video Upload
-          </h1>
-          <!-- Masthead Subheading-->
-          <p class="masthead-subheading font-weight-light mb-0">
-            <br /><br /><br />Input the desired video file into the system by: <br><br>
-          Clicking on "Choose File" button to access your file manager <br><br>
-          Find the desired mp3 or mp4 file <br><br> Click "submit"
-          and now the video should be uploaded into the system <br><br> Click on "Home" in the navigation bar above to go back
-          </p>
-        </div>
-      </header>
+      <div class="container d-flex align-items-center flex-column">
+        <!-- <img class="masthead-avatar mb-5" src="assets/img/head_logo.JPG" alt="..." /> -->
+        <!-- Masthead Heading-->
+        <h1 class="masthead-heading mb-0">
+          Video Upload
+        </h1>
+        <!-- Masthead Subheading-->
+        <p class="masthead-subheading font-weight-light mb-0">
+          <br /><br /><br />Input the desired video file into the system by: <br><br>
+        Clicking on "Choose File" button to access your file manager <br><br>
+        Find the desired mp3 or mp4 file <br><br> Click "submit"
+        and now the video should be uploaded into the system <br><br> Click on "Home" in the navigation bar above to go back
+        </p>
+      </div>
+    </header>
 
     <!-- Video Upload Section-->
     <section class="page-section portfolio" id="videoupload">
@@ -146,51 +118,25 @@
               <img class="img-fluid" src="{{ url_for('static', filename='assets/img/portfolio/video.png')}}" alt="..." />
               <p class="mb-4" align ="center">Upload the desired video here.</p>
               <!-- Enter the file to be uploaded and processed-->
-              <input type="file" id="fileUpload" />
-              <button onclick="s3upload()">Submit</button>
-              <div align="center">
-                <progress max="”100”" value="”0”"></progress>
+              <form
+                action="/AWS-Video-File-upload"
+                method="post"
+                enctype="multipart/form-data">
+                <input type="file" name="file" value="file" />
+                <input
+                  type="submit"
+                  name="upload"
+                  value="Upload"
+                  class="btn btn-success"
+                />
+              </form>
+              {{msg}}
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-
-    <!--S3 upload-->
-    <script type="text/javascript">
-      function s3upload() {
-        var files = document.getElementById("fileUpload").files;
-        if (files) {
-          var file = files[0];
-          var fileName = file.name;
-          var filePath = "Video-File-Storage/" + fileName;
-          var fileUrl =
-            "https://" +
-            bucketRegion +
-            ".amazonaws.com/Video-File-Storage/" +
-            filePath;
-
-          s3.upload(
-            {
-              Key: filePath,
-              Body: file,
-              ACL: "public-read",
-            },
-            function (err, data) {
-              if (err) {
-                reject("error");
-              }
-
-              alert("Successfully Uploaded!");
-            }
-          ).on("httpUploadProgress", function (progress) {
-            var uploaded = parseInt((progress.loaded * 100) / progress.total);
-            $("progress").attr("value", uploaded);
-          });
-        }
-      }
-    </script>
 
     <!-- Footer-->
     <footer class="footer text-center">
@@ -239,6 +185,8 @@
         </div>
       </div>
     </footer>
+
+    </div>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
