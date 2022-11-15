@@ -2,6 +2,7 @@
 import io 
 from PIL import Image
 from BackEnd.Python.s3upload import upload_to_aws
+from BackEnd.Python.New_Image_Text import TesseractMain
 import os
 
 #Bucket name for AWS
@@ -52,6 +53,8 @@ def IteratePDF (pdf_file, filename):
             #uploads to AWS and removes images locally
             uploaded = upload_to_aws(os.path.dirname(__file__) + "/" + imagename,BUCKET_NAME,'Image-Storage/' + filename + "/"  + imagename)
             
+            TesseractMain(image_path,imagename,filename)
+
             os.remove(os.path.dirname(__file__) + "/" + imagename)
 
 
