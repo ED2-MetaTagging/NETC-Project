@@ -53,7 +53,7 @@ def IteratePDF (pdf_file, filename):
             #uploads to AWS and removes images locally
             uploaded = upload_to_aws(os.path.dirname(__file__) + "/" + imagename,BUCKET_NAME,'Image-Storage/' + filename + "/"  + imagename)
             
-            TesseractMain(image_path,imagename,filename)
+            #TesseractMain(image_path,imagename,filename)
 
             os.remove(os.path.dirname(__file__) + "/" + imagename)
 
