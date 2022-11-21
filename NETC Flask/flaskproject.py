@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
 from BackEnd.Python.s3upload import upload_to_aws
 from BackEnd.Python.Image_Extraction import IteratePDF
+from BackEnd.Python.PDF_Selection import openFile
 import os
 import fitz
 
@@ -41,7 +42,11 @@ def upload():
 
     #Opens file and runs Image Extraction, closes and removes file after
     pdf_file = fitz.open(os.path.dirname(__file__) + "/" + filename)
+    FilePath = os.path.dirname(__file__) + "/" + filename
     IteratePDF(pdf_file, filename)
+
+    openFile(FilePath,filename)
+
     pdf_file.close()
     os.remove(filename)
 
