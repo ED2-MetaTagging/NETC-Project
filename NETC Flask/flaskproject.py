@@ -1,13 +1,19 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, flash, Response
+from flask_bootstrap import Bootstrap
 from werkzeug.utils import secure_filename
 from BackEnd.Python.s3upload import upload_to_aws
 from BackEnd.Python.Image_Extraction import IteratePDF
 from BackEnd.Python.PDF_Selection import openFile
+from BackEnd.Python.s3content import get_bucket
+from BackEnd.Python.filters import datetimeformat, file_type
 import os
 import fitz
 
 
 app = Flask(__name__,template_folder='FrontEnd',static_folder='static')
+Bootstrap(app)
+app.jinja_env.filters['datetimeformat'] = datetimeformat
+app.jinja_env.filters['file_type'] = file_type
 
 
 BUCKET_NAME = 'netc-filestorage'
@@ -23,6 +29,35 @@ def index():
 @app.route('/home')
 def home():
     return render_template('index.html')
+
+#displaying S3 bucket
+@app.route('/DisplayFiles')
+def files():
+    my_bucket = get_bucket()
+    summaries = my_bucket.objects.all()
+
+    #Folders
+    fileStorage = my_bucket.objects.filter(Prefix='File-Storage/')
+    imageStorage = my_bucket.objects.filter(Prefix='Image-Storage/')
+    metaStorage = my_bucket.objects.filter(Prefix='Meta-Data-Storage/')
+    videoStorage = my_bucket.objects.filter(Prefix='Video-File-Storage/')
+
+    return render_template('Display.html', my_bucket=my_bucket, files=fileStorage, images=imageStorage, meta=metaStorage, videos=videoStorage)
+
+#Downloading File
+@app.route('/download', methods=['POST'])
+def download():
+    key = request.form['key']
+
+    my_bucket = get_bucket()
+    file_obj = my_bucket.Object(key).get()
+
+    return Response(
+        file_obj['Body'].read(),
+        mimetype='text/plain',
+        headers={"Content-Disposition": "attachment;filename={}".format(key)}
+    )
+
 
 #PDF Upload page
 @app.route('/PDF-upload')
@@ -50,7 +85,8 @@ def upload():
     pdf_file.close()
     os.remove(filename)
 
-    return render_template("PDF-upload.html",msg =msg)
+
+    return redirect(url_for('files'))
 
 #Video Upload page
 @app.route('/video-upload')
@@ -70,9 +106,8 @@ def AWSVideoupload():
 
     os.remove(filename)
 
-    return render_template("video-upload.html",msg =msg)
+    return redirect(url_for('files'))
 
 
 if __name__ == '__main__':
     app.run(debug=True)
-    app.run(host='0.0.0.0')
