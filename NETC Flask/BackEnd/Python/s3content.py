@@ -1,8 +1,8 @@
 import boto3
 from flask import session
 
-ACCESS_KEY = 'AKIAQ4D4US5BPC2UQRS2'
-SECRET_KEY = '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'
+ACCESS_KEY = 'NA'
+SECRET_KEY = 'NA'
 
 BUCKET_NAME = 'netc-filestorage'
 
